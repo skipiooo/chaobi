@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<title>500元，梭哈人生｜可玩原型</title>
+<style>
+:root{--bg:#070a13;--panel:#101827eF;--line:#34445f;--cyan:#45d9ff;--green:#00e59a;--red:#ff4564;--gold:#ffbd4a;--muted:#94a4bf;--text:#edf3ff}
+*{box-sizing:border-box}body{margin:0;background:#080b14;color:var(--text);font-family:system-ui,"Microsoft YaHei",sans-serif;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;z-index:-2;background:radial-gradient(ellipse at 15% 80%,#50204e 0,transparent 34%),radial-gradient(ellipse at 85% 10%,#102e56 0,transparent 35%),linear-gradient(135deg,#090b15,#111425 55%,#080a10)}
+body:after{content:"";position:fixed;inset:0;z-index:-1;opacity:.16;background-image:linear-gradient(#39465b55 1px,transparent 1px),linear-gradient(90deg,#39465b55 1px,transparent 1px);background-size:36px 36px}
+button,input,select{font:inherit}button{cursor:pointer;border:1px solid #40516e;background:#1b2940;color:var(--text);padding:9px 12px;border-radius:8px;transition:.15s}button:hover{filter:brightness(1.2);transform:translateY(-1px)}button:disabled{opacity:.35;cursor:not-allowed;transform:none}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 18px;border-bottom:1px solid #31405a;background:#080d17ed;position:sticky;top:0;z-index:5;flex-wrap:wrap}
+.daybox{background:#d9c6b5;color:#16151b;padding:7px 14px;transform:rotate(-1deg);font-weight:900;clip-path:polygon(3% 0,100% 7%,96% 100%,0 91%)}
+.daybox small{display:block;font-weight:600}.meters{display:none!important;gap:16px;flex-wrap:wrap}.meter{min-width:110px;font-size:12px;color:var(--muted)}.meter b{color:var(--text);font-size:15px}.bar{height:7px;background:#090d15;border:1px solid #3a4b66;border-radius:9px;margin-top:4px;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,#f6a73b,#ffdd71);width:50%}.cash{font-weight:900;color:var(--green);font-size:20px}
+.layout{display:grid;grid-template-columns:minmax(220px,1fr) minmax(440px,1.65fr) minmax(235px,.9fr);gap:12px;padding:12px;max-width:1600px;margin:auto}
+.panel{background:linear-gradient(145deg,#121b2ceF,#0b111deF);border:1px solid #3a4a65;border-radius:13px;box-shadow:0 8px 25px #0008;overflow:hidden}.panelhead{padding:11px 13px;border-bottom:1px solid #293850;background:#172238;display:flex;align-items:center;justify-content:space-between;font-weight:800}.leftscene{min-height:650px;position:relative;background:linear-gradient(180deg,#141b35aa,#0c0e18ee),repeating-linear-gradient(90deg,transparent 0 42px,#5d3b7044 43px 45px),linear-gradient(160deg,#1b2444,#29152b 60%,#0c101b)}
+.neon{position:absolute;top:26px;left:16px;right:16px;padding:15px 12px;border:1px solid #bd78b9;background:#211529dd;box-shadow:0 0 18px #b34ca544;transform:rotate(-1deg);font-weight:900;line-height:1.7;font-size:18px;color:#f5d4ff}
+ .character,.person,.eyes,.shirt{display:none}
+.desk{position:absolute;bottom:0;left:0;right:0;height:155px;background:linear-gradient(160deg,#654c47,#191d2b 45%,#070b13);border-top:4px solid #a77c5a;clip-path:polygon(0 12%,100% 0,100% 100%,0 100%)}
+.sticky{position:absolute;bottom:26px;left:15px;right:15px;background:#e9d5ad;color:#201b1a;padding:12px;transform:rotate(2deg);font-weight:900;box-shadow:0 5px 15px #0008;text-align:center}
+.sidequote{position:absolute;bottom:175px;left:16px;color:#ffc3f1;text-shadow:0 0 10px #ed52e0;font-weight:900;font-size:23px;transform:rotate(-8deg)}
+.wallet{margin:12px;padding:12px;background:#07101c;border:1px solid #34506c;border-radius:10px}.wallet strong{font-size:24px;color:var(--green)}.wallet .muted{font-size:12px;color:var(--muted)}
+.tabs{display:flex;gap:4px;padding:9px;border-bottom:1px solid #2a3a52}.tabs button{flex:1;padding:8px 4px;background:transparent;border-color:transparent;color:#a9b6ca}.tabs button.active{background:#263650;border-color:#4a6795;color:white;box-shadow:inset 0 -2px var(--cyan)}
+.market-summary{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:12px}.coin{font-weight:900}.symbol{font-size:12px;color:var(--muted)}.price{font-size:24px;color:var(--green);font-weight:900}.up{color:var(--green)}.down{color:var(--red)}
+.chartbox{margin:0 12px 12px;border:1px solid #2c3b52;border-radius:8px;background:#080e19;overflow:hidden}.charttop{display:flex;justify-content:space-between;padding:8px 10px;color:var(--muted);font-size:12px}.chart{width:100%;height:225px;display:block}
+.trading{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 12px 12px}.tradebox{border:1px solid #256a62;border-radius:9px;padding:10px;background:#0b211f}.tradebox.short{border-color:#7c3447;background:#241018}.tradebox h3{font-size:14px;margin:0 0 9px}.tradebox label{display:block;color:#9faec4;font-size:12px;margin:7px 0 4px}.tradebox input[type=number]{width:100%;background:#080d16;color:white;border:1px solid #36445b;border-radius:5px;padding:7px}.tradebox input[type=range]{width:100%;accent-color:var(--cyan)}.full{width:100%;font-weight:900;margin-top:8px}.buy{background:linear-gradient(90deg,#00b97a,#00e69b);color:#04251c;border:0}.sell{background:linear-gradient(90deg,#d92f4b,#ff4564);border:0}.leverage{display:flex;gap:5px;flex-wrap:wrap;padding:0 12px 12px;align-items:center}.leverage span{font-size:12px;color:var(--muted)}.leverage button{padding:5px 9px;font-size:12px}.leverage button.active{background:#1764c5;border-color:#65b7ff}
+.newsitem{padding:11px 12px;border-bottom:1px solid #29364c;display:grid;grid-template-columns:54px 1fr;gap:9px}.newsicon{height:54px;border-radius:8px;background:linear-gradient(135deg,#325b78,#78365c);display:flex;align-items:center;justify-content:center;font-size:26px}.newsitem b{font-size:13px}.newsitem p{font-size:12px;color:#a8b5ca;line-height:1.5;margin:5px 0 0}.newsitem small{color:#71829d}
+.righttabs{display:flex}.righttabs button{flex:1;border-radius:0}.coinrow{display:flex;align-items:center;gap:9px;padding:9px 10px;border-bottom:1px solid #26344b;cursor:pointer}.coinrow.selected{background:#152e43;outline:1px solid #36cfff}.coinicon{width:37px;height:37px;border-radius:50%;background:linear-gradient(135deg,#e8bc65,#79522c);display:grid;place-items:center;font-size:20px}.coinrow .name{font-size:12px;font-weight:800}.coinrow .sym{font-size:11px;color:#9aa9bf}.coinrow .pct{margin-left:auto;font-size:12px;font-weight:900}
+.bottomnav{display:grid;grid-template-columns:repeat(9,1fr);gap:8px;padding:0 12px 14px;max-width:1600px;margin:auto}.navbtn{min-height:68px;background:linear-gradient(150deg,#d8c8b4,#a9a0a0);color:#171722;border:2px solid #302735;border-radius:8px;font-weight:900;box-shadow:0 4px #05070b}.navbtn span{display:block;font-size:22px}.navbtn small{font-size:11px}
+.logline{font-size:12px;padding:7px 0;border-bottom:1px dashed #30415a;color:#b9c5d7}.logline strong{color:#ffd07a}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);padding:12px 18px;border-radius:9px;background:#17263b;border:1px solid #5c80ae;box-shadow:0 8px 30px #000b;z-index:10;display:none;max-width:90vw}
+
+.cinematic{position:fixed;inset:0;z-index:50;background:radial-gradient(ellipse at center,#1a2848f5,#03050bf7 72%);display:flex;align-items:center;justify-content:center;padding:24px;opacity:1;transition:opacity .55s}
+.cinematic.fade{opacity:0;pointer-events:none}.cinema-card{width:min(760px,100%);text-align:center;border:1px solid #6c7f9e;background:#0b1220ed;padding:clamp(22px,5vw,48px);box-shadow:0 0 60px #5c2e8a44;border-radius:14px}
+.cinema-kicker{color:#ffbd4a;letter-spacing:.22em;font-size:12px}.cinema-title{font-size:clamp(30px,6vw,58px);font-weight:1000;line-height:1.15;margin:18px 0;background:linear-gradient(90deg,#f4d6ff,#55dfff,#ffbd4a);color:transparent;background-clip:text}
+.cinema-text{color:#b9c8dc;line-height:1.9;max-width:620px;margin:0 auto 22px}.cinema-progress{height:3px;background:#253149;margin:22px 0;overflow:hidden}.cinema-progress i{display:block;width:0;height:100%;background:#4bdcff;animation:loadbar 2.8s ease forwards}@keyframes loadbar{to{width:100%}}
+.waiting-overlay{position:fixed;inset:0;z-index:40;background:#03060be8;display:none;align-items:center;justify-content:center;padding:20px}.waiting-card{width:min(420px,100%);text-align:center;padding:28px;border:1px solid #4c6384;background:#101a2a;border-radius:14px}.spinner{width:44px;height:44px;border:4px solid #2b3d58;border-top-color:#53d7ff;border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 18px}@keyframes spin{to{transform:rotate(360deg)}}
+.modal{position:fixed;inset:0;background:#000b;z-index:20;display:none;align-items:center;justify-content:center;padding:20px}.modalbox{width:min(620px,100%);background:#101a2a;border:1px solid #627896;border-radius:14px;padding:20px;max-height:85vh;overflow:auto}.modalbox h2{margin-top:0}.luxury-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.luxury-card{padding:12px;border:1px solid #344b44;border-radius:10px;background:#0b1512}.luxury-card b{color:#c9ff45}.luxury-card p{font-size:12px;color:#aab8ad;min-height:34px}.stream-chat{height:250px;overflow:auto;background:#05090c;border:1px solid #35413c;border-radius:9px;padding:10px}.chatline{padding:6px 4px;border-bottom:1px solid #202c28;font-size:12px;line-height:1.5}.chatline b{color:#c9ff45}.cinema-stage{min-height:180px;display:grid;place-items:center;background:radial-gradient(circle,#263d35,#080d0b 70%);border:1px solid #3c5a4b;border-radius:12px;margin:14px 0}.cinema-stage .emoji{font-size:70px;animation:floaty 1.5s ease-in-out infinite alternate}@keyframes floaty{to{transform:translateY(-12px) rotate(3deg)}}.modalbox input,.modalbox select{background:#080d16;color:white;border:1px solid #40516e;padding:9px;border-radius:7px;width:100%;margin:5px 0 12px}
+@media(max-width:1050px){.layout{grid-template-columns:1fr 1.5fr}.rightpanel{grid-column:1/-1}.rightgrid{display:grid;grid-template-columns:1fr 1fr}.bottomnav{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:700px){.layout{grid-template-columns:1fr;padding:8px}.leftscene{min-height:380px}.rightpanel{grid-column:auto}.rightgrid{display:block}.trading{grid-template-columns:1fr 1fr}.bottomnav{grid-template-columns:repeat(3,1fr)}.meters{gap:8px}.meter{min-width:85px}.top{padding:8px}.chart{height:190px}}
+
+/* VISUAL PASS 03 — editorial noir / underground trading terminal */
+:root{--bg:#080a0b;--panel:#111615f2;--line:#34433c;--cyan:#c9ff45;--green:#c9ff45;--red:#ff5368;--gold:#f0b86e;--muted:#8f9d94;--text:#f1f4ed}
+body{background:#080a0b;color:#f1f4ed;font-family:ui-monospace,"SFMono-Regular",Consolas,"Microsoft YaHei",monospace}
+body:before{background:radial-gradient(ellipse at 5% 0%,#25382b 0,transparent 28%),radial-gradient(ellipse at 92% 100%,#35251a 0,transparent 30%),linear-gradient(135deg,#070908,#111614 58%,#080a09)}
+body:after{opacity:.10;background-image:linear-gradient(#a6b7a622 1px,transparent 1px),linear-gradient(90deg,#a6b7a622 1px,transparent 1px);background-size:28px 28px}
+.top{background:#090d0cf2;border-bottom:1px solid #526054}
+.daybox{background:#d8e3cf;color:#141914;clip-path:none;transform:none;border-left:5px solid #c9ff45}
+.panel{background:linear-gradient(145deg,#141a17f5,#0b100ef5);border-color:#39483f;border-radius:5px;box-shadow:0 12px 35px #0008}
+.panelhead{background:#1a241e;border-color:#34443a}
+.leftscene{background:linear-gradient(180deg,#111a16,#0a0e0c 80%);min-height:540px}
+.neon{border:1px solid #52634e;background:#101713;color:#dfe9d9;box-shadow:6px 6px 0 #c9ff45;transform:none;font-size:17px}
+.sidequote{color:#c9ff45;text-shadow:none;transform:none;font-size:18px;bottom:190px;left:22px}
+.desk{height:130px;background:linear-gradient(160deg,#414c3d,#171d18 45%,#070a08);border-top:3px solid #c9ff45}
+.sticky{background:#dce6d0;color:#111811;transform:rotate(-1deg);box-shadow:5px 5px 0 #c9ff45;border-radius:0}
+.wallet{background:#070b09;border-color:#56684f;border-radius:4px}
+button{border-radius:4px;background:#1a241e;border-color:#4b5c4e}
+button:hover{filter:brightness(1.18);box-shadow:0 0 0 1px #c9ff45}
+.tabs button.active{background:#283629;border-color:#c9ff45;color:#f6ffe8;box-shadow:inset 0 -2px #c9ff45}
+.chartbox{border-radius:3px;border-color:#35483a;background:#070b09}
+.tradebox,.tradebox.short{border-radius:4px;background:#0d1a13;border-color:#60744f}
+.tradebox.short{background:#1b1013;border-color:#783440}
+.buy{background:#c9ff45;color:#10160c}.sell{background:#ff5368;color:#fff}
+.leverage button.active{background:#c9ff45;color:#11180c;border-color:#c9ff45}
+.coinrow.selected{background:#1b2a20;outline:1px solid #c9ff45}
+.coinicon{border-radius:4px;background:#27382a}
+.newsicon{border-radius:3px;background:linear-gradient(135deg,#354d3b,#47322a)}
+.navbtn{background:linear-gradient(150deg,#dbe5d2,#a9b5a1);color:#121711;border:1px solid #71806d;border-radius:3px;box-shadow:3px 3px 0 #020302}
+.modalbox,.waiting-card{background:#111916;border-color:#5b6b59;border-radius:5px}
+.cinematic{background:radial-gradient(ellipse at center,#17241bfa,#050706 75%)}
+.cinema-card{border:1px solid #61755a;background:#0b100df5;border-radius:4px;box-shadow:8px 8px 0 #c9ff45}
+.cinema-title{background:linear-gradient(90deg,#f1f4ed,#c9ff45,#e3a86b);background-clip:text}
+.cinema-progress i{background:#c9ff45}
+.spinner{border-top-color:#c9ff45}
+@media(max-width:700px){.leftscene{min-height:350px}}
+
+
+.daily-report{padding:16px 14px 18px}
+.report-kicker{font-size:10px;letter-spacing:.12em;color:#8f9d94;margin-bottom:16px}
+.report-line{display:flex;justify-content:space-between;gap:10px;align-items:baseline;padding:9px 0;border-bottom:1px solid #29372e;font-size:12px;color:#a9b5aa}
+.report-line b{font-size:13px;color:#eef4e9;text-align:right;overflow-wrap:anywhere}
+.report-line b.up{color:#c9ff45}.report-line b.down{color:#ff5368}
+.report-rule{height:1px;background:#71845e;margin:14px 0}
+.report-health{height:5px;background:#202b23;border:1px solid #40513e;margin:0 0 10px;overflow:hidden}
+.report-health i{display:block;width:78%;height:100%;background:#c9ff45}
+.report-health.blue i{background:#65bfff}
+.risk-settings{margin:10px 0;padding:9px;background:#111713;border:1px solid #39483f}.risk-settings label{display:block;font-size:11px;color:#a9b5aa;margin:6px 0}.risk-settings input{width:100%;box-sizing:border-box;background:#080b09;color:#f1f4ed;border:1px solid #465547;padding:7px;margin-bottom:4px}.report-note{margin-top:18px;padding:12px;background:#dce6d0;color:#111811;font-size:12px;line-height:1.7;border-left:4px solid #c9ff45;font-weight:800}
+
+
+/* iPhone Safari mobile adaptation: touch-first layout, safe areas, readable controls */
+html{ -webkit-text-size-adjust:100%; text-size-adjust:100%; scroll-padding-top:90px; }
+body{ min-width:0; padding-bottom:calc(84px + env(safe-area-inset-bottom)); }
+button,input,select{ touch-action:manipulation; }
+button{ min-height:40px; }
+input,select{ font-size:16px; }
+.chart{ max-width:100%; }
+@media (max-width:700px){
+  html,body{width:100%;max-width:100%;overflow-x:hidden}
+  body{padding-bottom:calc(78px + env(safe-area-inset-bottom));}
+  .top{position:sticky;top:0;z-index:15;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:7px 10px;padding:calc(7px + env(safe-area-inset-top)) 10px 8px;align-items:center}
+  .top .daybox{font-size:13px;padding:5px 8px;justify-self:start}
+  .top>div:nth-child(2){font-size:12px!important;text-align:right;white-space:nowrap}
+  .top>div:nth-child(4){font-size:11px;grid-column:1;grid-row:2;display:flex;align-items:center;gap:8px}
+  .cash{font-size:17px}
+  .top>button{grid-column:2;grid-row:2;min-width:42px;padding:7px}
+  .layout{display:flex;flex-direction:column;gap:10px;padding:8px 8px 12px;width:100%;max-width:100%;}
+  .layout>section:nth-child(2){order:1}
+  .layout>.rightpanel{order:2}
+  .layout>.leftscene{order:3}
+  .panel{width:100%;min-width:0;border-radius:5px}
+  .panelhead{padding:10px;font-size:13px}
+  .tabs{position:sticky;top:78px;z-index:4;background:#111813;padding:6px;gap:4px}
+  .tabs button{min-height:38px;padding:7px 3px;font-size:13px}
+  .market-summary{padding:10px;gap:8px}
+  .coin{font-size:14px}
+  .price{font-size:22px}
+  .chartbox{margin:0 8px 10px}
+  .charttop{font-size:10px;padding:7px;gap:6px}
+  .chart{height:170px;width:100%}
+  .leverage{padding:0 9px 10px;gap:6px}
+  .leverage span{font-size:11px}
+  .leverage button{min-height:36px;padding:6px 9px}
+  .trading{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:7px;padding:0 8px 10px}
+  .tradebox{padding:8px;min-width:0}
+  .tradebox h3{font-size:13px}
+  .tradebox label{font-size:11px;line-height:1.45;overflow-wrap:anywhere}
+  .tradebox input[type=number]{min-height:40px;padding:8px;font-size:16px}
+  .tradebox input[type=range]{height:30px;margin:4px 0;}
+  .risk-settings{padding-top:2px}
+  .full{min-height:44px;font-size:13px;padding:8px 3px}
+  #quickPositions{padding:0 8px 10px!important;overflow-wrap:anywhere}
+  .righttabs button{min-height:42px;font-size:13px}
+  .coinrow{padding:8px;gap:7px}
+  .coinicon{width:32px;height:32px;flex:0 0 32px;font-size:17px}
+  .newsitem{grid-template-columns:42px minmax(0,1fr);gap:8px;padding:9px}
+  .newsicon{height:42px;font-size:21px}
+  .newsitem p{overflow-wrap:anywhere}
+  .leftscene{min-height:0}
+  .daily-report{padding:12px 10px 14px}
+  .report-line{font-size:11px;gap:8px}
+  .report-line b{font-size:12px;max-width:58%;}
+  .bottomnav{position:fixed;z-index:30;left:0;right:0;bottom:0;display:flex;gap:6px;max-width:none;width:100%;margin:0;padding:7px 8px calc(7px + env(safe-area-inset-bottom));background:#080d0cf5;border-top:1px solid #526054;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .bottomnav::-webkit-scrollbar{display:none}
+  .navbtn{flex:0 0 72px;min-width:72px;min-height:57px;padding:5px 4px;box-shadow:2px 2px 0 #020302;font-size:11px;line-height:1.25;white-space:normal}
+  .navbtn span{font-size:19px;line-height:1.2}
+  .navbtn small{display:none}
+  .modal{align-items:flex-end;padding:0;}
+  .modalbox{width:100%;max-height:88dvh;max-height:88vh;border-radius:14px 14px 0 0;padding:16px 14px calc(16px + env(safe-area-inset-bottom));overflow-y:auto;-webkit-overflow-scrolling:touch}
+  .modalbox h2{font-size:19px}
+  .modalbox button{min-height:42px;max-width:100%;}
+  .luxury-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .luxury-card{padding:9px;min-width:0;overflow-wrap:anywhere}
+  .cinematic{padding:12px}
+  .cinema-card{padding:22px 16px}
+  .cinema-title{font-size:32px}
+  .waiting-card{width:100%;padding:22px 16px}
+  .stream-chat{height:min(35vh,250px)}
+  .toast{bottom:calc(88px + env(safe-area-inset-bottom));font-size:13px;width:max-content;max-width:92vw;text-align:center}
+}
+@media (max-width:380px){
+  .trading{grid-template-columns:minmax(0,1fr)}
+  .tradebox{padding:10px}
+  .tradebox h3{font-size:14px}
+  .navbtn{flex-basis:66px;min-width:66px}
+  .luxury-grid{grid-template-columns:minmax(0,1fr)}
+  .chart{height:150px}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+</style>
+</head>
+<body>
+<header class="top">
+ <div class="daybox">第 <span id="day">1</span> 天<small id="date">2025年1月1日（周三）</small></div>
+ <div style="font-size:14px">◷ <b id="clock">09:00</b> · <span id="jobStatusText">待业</span></div>
+ <div class="meters">
+  <div class="meter">❤️ 身体 <b id="bodyN">78</b>/100<div class="bar"><i id="bodyBar" style="width:78%;background:#ff5473"></i></div></div>
+  <div class="meter">🧠 精神 <b id="mindN">72</b>/100<div class="bar"><i id="mindBar" style="width:72%;background:#4abaff"></i></div></div>
+  <div class="meter">💼 求职竞争力 <b id="jobN">35</b>/100<div class="bar"><i id="jobBar" style="width:35%"></i></div></div>
+ </div>
+ <div>💵 现金 <div class="cash" id="cashTop">¥500.00</div></div>
+ <button onclick="openModal('settingsModal')" title="设置">⚙️</button>
+</header>
+<main class="layout">
+ <section class="panel leftscene">
+  <div class="panelhead">▤ 每日日报 <span id="reportDay">DAY 01</span></div>
+  <div class="daily-report">
+   <div class="report-kicker">DAILY ACCOUNTING / 今日结算</div>
+   <div class="report-line"><span>今日资产变化</span><b id="dailyChange" class="up">+¥0.00</b></div>
+   <div class="report-line"><span>当前可用现金</span><b id="reportCash">¥500.00</b></div>
+   <div class="report-line"><span>持仓保证金及浮盈亏</span><b id="reportPositions">¥0.00</b></div>
+   <div class="report-line"><span>当前净资产</span><b id="reportNet">¥500.00</b></div>
+   <div class="report-line"><span>当前资金持有量</span><b id="reportDebt">¥500.00</b></div>
+   <div class="report-rule"></div>
+   <div class="report-line"><span>身体 / 体力</span><b id="reportBody">78 / 100</b></div>
+   <div class="report-health"><i id="reportBodyBar"></i></div>
+   <div class="report-line"><span>精神状态</span><b id="reportMind">72 / 100</b></div>
+   <div class="report-health blue"><i id="reportMindBar"></i></div>
+   <div class="report-line"><span>工作状态</span><b id="reportJob">待业</b></div><div class="report-line"><span>求职竞争力</span><b id="reportJobSkill">35 / 100</b></div>
+   <div class="report-line"><span>游戏时间</span><b id="reportTime">09:00</b></div>
+   <div class="report-note" id="reportNote">今天的任务：活下去，别把保证金当成生活费。</div>
+  </div>
+  <div class="panelhead" style="margin-top:10px">💳 借款与还款</div>
+  <div id="repaymentPanel" class="daily-report"><div class="logline">暂无借款记录。</div></div>
+  <div style="display:none"><span id="rank">A4</span><span id="networth">500</span><b id="pnl">0</b><b id="debt">0</b><b id="liqs">0</b></div>
+ </section>
+ <section class="panel">
+  <div class="tabs"><button class="active" onclick="switchTab(this,'market')">行情</button><button onclick="switchTab(this,'orders')">委托</button><button onclick="switchTab(this,'assets')">资产</button></div>
+  <div id="marketView">
+   <div class="market-summary"><div><div id="volatilityLabel" style="font-size:11px;color:#c9ff45;margin-bottom:4px">日间低波动</div><div class="coin" id="coinName">狗头人生币 <span class="symbol">DGF</span></div><div class="symbol">一句话改变狗狗生</div></div><div><div class="price" id="price">0.4207</div><div class="symbol" id="change">+0.00%</div></div></div>
+   <div class="chartbox"><div class="charttop"><span>1m　5m　15m　1h　4h　<b style="color:#7ec8ff">1d</b></span><span id="highlow">24h 高 -- / 低 --</span></div><canvas id="chart" class="chart" width="900" height="450"></canvas></div>
+   <div class="leverage"><span>杠杆</span><div id="levButtons"></div><span style="margin-left:auto">保证金比例</span><b id="marginPct">25%</b></div>
+   <div class="trading">
+    <div class="tradebox"><h3 style="color:#5bf0c3">买入（做多）</h3><label>投入保证金（人民币） · 滑轨按可用现金比例</label><input type="number" id="longMargin" min="1" value="100"><input type="range" id="longRange" min="0" max="100" value="20" oninput="syncMargin('long')"><label>预计名义仓位：<b id="longNotional">1000.00</b> CNY</label><div class="risk-settings"><label>止盈金额（人民币，选填）</label><input type="number" id="longTP" min="0.1" step="0.1" placeholder="不设置"><label>止损金额（人民币，选填）</label><input type="number" id="longSL" min="0.1" step="0.1" placeholder="例如：盈利100元后止盈"></div><button class="full buy" onclick="trade('long')">买入开多 ↗</button></div>
+    <div class="tradebox short"><h3 style="color:#ff7185">卖出（做空）</h3><label>投入保证金（人民币） · 滑轨按可用现金比例</label><input type="number" id="shortMargin" min="1" value="100"><input type="range" id="shortRange" min="0" max="100" value="20" oninput="syncMargin('short')"><label>预计名义仓位：<b id="shortNotional">1000.00</b> CNY</label><div class="risk-settings"><label>止盈金额（人民币，选填）</label><input type="number" id="shortTP" min="0.1" step="0.1" placeholder="不设置"><label>止损金额（人民币，选填）</label><input type="number" id="shortSL" min="0.1" step="0.1" placeholder="例如：盈利100元后止盈"></div><button class="full sell" onclick="trade('short')">卖出开空 ↘</button></div>
+   </div>
+  </div>
+  <div class="panelhead">▣ 我的持仓 / 快捷平仓 <b id="positionCount">0</b></div>
+  <div id="quickPositions" style="padding:0 12px 12px"></div>
+  <div id="otherView" style="display:none;padding:14px"><h3 id="otherTitle">持仓</h3><div id="otherContent"></div></div>
+ </section>
+ <section class="panel rightpanel">
+  <div class="righttabs"><button class="active" onclick="rightTab(this,'coins')">币种列表</button><button onclick="rightTab(this,'events')">市场动态</button></div>
+  <div id="coinsView"><div id="coinList"></div></div>
+  <div id="eventsView" style="display:none;padding:10px" id="eventsView"><div id="eventFeed"></div></div>
+  <div class="panelhead">🗞️ 今日事件 <span style="font-size:11px;color:#8da0bc" id="eventTime">刚刚</span></div>
+  <div id="newsFeed">
+   <div class="newsitem"><div class="newsicon">📱</div><div><b>室友发来收益截图</b><p>“昨天随便开了个 50x，今天换手机了。”你盯着自己余额看了三秒。</p><small>新手村 · 心态测试</small></div></div>
+   <div class="newsitem"><div class="newsicon">🎓</div><div><b>毕业倒计时</b><p>辅导员提醒：简历不是靠爆仓记录写出来的。</p><small>现实世界 · 求职任务</small></div></div>
+  </div>
+ </section>
+</main>
+<nav class="bottomnav">
+ <button class="navbtn" onclick="openJobModal()"><span>💼</span>找工作<small>选择投递岗位</small></button>
+ <button class="navbtn" onclick="goToWork()"><span>🧰</span>去上班<small>占用8小时 / 每天一次</small></button>
+ <button class="navbtn" onclick="openPhone()"><span>▣</span>手机<small>借贷 / 家人来信</small></button>
+ <button class="navbtn" onclick="advanceHour()"><span>◷</span>推进1小时<small>结算实时币价</small></button>
+ <button class="navbtn" onclick="action('社交')"><span>♟</span>社交<small>可能触发奇遇</small></button>
+ <button class="navbtn" onclick="action('消费')"><span>🛒</span>消费<small>管理生活方式</small></button>
+ <button class="navbtn" onclick="openBedtime()"><span>🌙</span>睡觉 / 今日日报<small>查看账单并睡到08:00</small></button>
+ <button class="navbtn" onclick="openShop()"><span>💎</span>商城<small>奢侈品 / 不加属性</small></button>
+ <button class="navbtn" onclick="openEntertainment()"><span>🥂</span>高端娱乐<small>KTV / 按摩 / 酒吧</small></button>
+ <button class="navbtn" onclick="openLive()"><span>📹</span>直播<small>KOL职业专属</small></button>
+</nav>
+
+<div class="cinematic" id="intro">
+ <div class="cinema-card">
+  <div class="cinema-kicker">A LIFE SIMULATOR · DAY ZERO</div>
+  <div class="cinema-title">500元，梭哈人生</div>
+  <div class="cinema-text">你是一名三线城市的大专大三学生。毕业越来越近，银行卡里只剩下500元生活费。开局时，这500元就是全部资产，所有交易、借贷与结算统一使用人民币。<br>某天，你刷到一段关于“凉兮”的讨论：有人把高杠杆当成逆天改命的门票，也有人在一夜之间失去一切。<br><br>你打开交易页面，决定试一次。<br><b style="color:#f5d5a0">这里没有保底结局，只有每天的选择，以及最后清算的资产。</b></div>
+  <div class="cinema-progress"><i></i></div><button onclick="startGame()" style="background:#d8c5a7;color:#15131a;font-weight:900;padding:12px 28px">进入人生</button>
+ </div>
+</div>
+<div class="waiting-overlay" id="waitOverlay"><div class="waiting-card"><div class="spinner"></div><h2 id="waitTitle">正在上班……</h2><p id="waitText" style="color:#a9b9d0;line-height:1.7">工位已就绪，人生正在缓慢加载。</p><div class="cinema-progress"><i></i></div></div></div>
+<div class="modal" id="bedtimeModal"><div class="modalbox"><div style="display:flex;justify-content:space-between;align-items:center"><h2>🌙 入睡前账单</h2><button onclick="closeModal('bedtimeModal')">暂不睡</button></div><div id="bedtimeBill" style="line-height:1.9;color:#d8e3cf"></div><p style="color:#a7b7ce;font-size:12px">睡觉时间由游戏内时钟决定：当天00:00前入睡恢复70点；00:00起，越晚入睡恢复越少，最低30点。睡醒时间固定为次日08:00。</p><button onclick="sleepNow()">确认睡觉，进入明天</button></div></div>
+<div class="modal" id="livingShortModal"><div class="modalbox"><h2>生活费扣款失败</h2><p id="livingShortText">现金不足以支付今日生活费。你可以借贷，或立即结算本局。</p>
+ <div id="livingLoanChoices" style="display:flex;gap:8px;flex-wrap:wrap;margin:12px 0"><button onclick="borrowForLiving('mom')">骗妈妈说交培训费（无利息）</button><button onclick="borrowForLiving('campus')">校园小额贷款（高利息）</button><button onclick="borrowForLiving('elephant')">大象花呗（更高利息）</button></div><button onclick="settleNow()">结束人生并结算</button></div></div>
+<div class="modal" id="phoneModal"><div class="modalbox">
+ <div style="display:flex;justify-content:space-between;align-items:center"><h2>📱 手机</h2><button onclick="closeModal('phoneModal')">关闭</button></div>
+ <div class="tabs"><button class="active" onclick="phoneTab('loans',this)">借钱平台</button><button onclick="phoneTab('letters',this)">家人来信 <b id="unreadCount">0</b></button></div>
+ <div id="phoneLoans">
+  <div class="newsitem"><div class="newsicon">🏦</div><div><b>城市商业银行 · 青年信用贷</b><p>利息相对低，但审核严格。额度 ¥2,000，年化模拟利率 12%。</p><button onclick="takeLoan('bank')">申请借款 ¥2,000</button></div></div>
+  <div class="newsitem"><div class="newsicon">📲</div><div><b>闪到钱包 · 极速到账</b><p>审核快，手续费与利息更高。额度 ¥5,000，年化模拟利率 36%。</p><button onclick="takeLoan('app')">立即借款 ¥5,000</button></div></div>
+  <div class="newsitem"><div class="newsicon">🧾</div><div><b>校园周转金</b><p>额度 ¥800，年化模拟利率 18%。借钱容易，月底还款时就不一定了。</p><button onclick="takeLoan('campus')">申请借款 ¥800</button></div></div>
+  <div class="newsitem"><div class="newsicon">🕶️</div><div><b>老熟人介绍 · 私下周转</b><p>额度 ¥10,000，年化模拟利率 120%。合同写得像谜语，催款倒是很准时。</p><button onclick="takeLoan('shark')">借款 ¥10,000（高风险）</button></div></div>
+  <p style="color:#9ba99d;font-size:12px">以上为虚构游戏机制，不对应真实贷款平台。利息按游戏时间逐小时累计，借款会同时增加现金和负债。</p>
+ </div>
+ <div id="phoneLetters" style="display:none"><div id="familyInbox"></div></div>
+ </div></div>
+<div class="modal" id="jobModal"><div class="modalbox"><h2>投递岗位</h2><p style="color:#aab8cd">岗位不同，入职难度、上班体力消耗和收入也不同。投递本身会消耗少量体力。</p>
+ <label>选择岗位</label><select id="jobChoice"><option value="office">普通职员｜月薪 ¥4,500｜上班体力 -12</option><option value="factory">工厂流水线｜月薪 ¥6,000｜上班体力 -22</option><option value="delivery">外卖骑手｜月收入约 ¥7,000｜上班体力 -28</option><option value="freelance">自由职业｜月收入不稳定｜上班体力 -8</option><option value="kol" id="kolJobOption" disabled>KOL主播｜需解锁（资产段位达到 A7 或 -A7）</option></select>
+ <button onclick="applyJob()">确认投递</button> <button onclick="closeModal('jobModal')">取消</button></div></div>
+
+<div class="modal" id="shopModal"><div class="modalbox"><div style="display:flex;justify-content:space-between;align-items:center"><h2>💎 奢侈品商城</h2><button onclick="closeModal('shopModal')">关闭</button></div><p style="color:#a7b7ce;font-size:12px">奢侈品不增加资金、体力或交易属性。解锁 KOL 职业后，已购奢侈品会作为直播人设展示并增加观众可信度。</p><div id="shopItems" class="luxury-grid"></div><p id="shopStatus" style="color:#c9ff45"></p></div></div>
+<div class="modal" id="entertainmentModal"><div class="modalbox"><div style="display:flex;justify-content:space-between;align-items:center"><h2>🥂 高端娱乐</h2><button onclick="closeModal('entertainmentModal')">关闭</button></div><p style="color:#a7b7ce;font-size:12px">娱乐只消耗时间与金钱，不产生额外收益。选择后会播放过场动画。</p><div id="entertainmentItems" class="luxury-grid"></div></div></div>
+<div class="modal" id="cinematicModal"><div class="modalbox" style="text-align:center"><div id="cinemaKicker" style="color:#c9ff45;letter-spacing:.2em;font-size:12px">NIGHT LIFE</div><h2 id="cinemaTitle">城市的另一面</h2><div class="cinema-stage"><div class="emoji" id="cinemaEmoji">🥂</div></div><p id="cinemaDescription" style="color:#b7c5bb;line-height:1.8"></p><div id="cinemaProgress" style="height:3px;background:#28372f;margin:18px 0;overflow:hidden"><div style="height:100%;width:0;background:#c9ff45;animation:loadbar 2.5s ease forwards"></div></div><button onclick="finishCinematic()">结束过场</button></div></div>
+<div class="modal" id="liveModal"><div class="modalbox"><div style="display:flex;justify-content:space-between;align-items:center"><h2>📹 KOL 直播间</h2><button onclick="closeModal('liveModal')">关闭直播</button></div><p id="liveStatus" style="color:#a7b7ce">观众会根据你的游戏操作自动发送弹幕。</p><div class="stream-chat" id="streamChat"></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button onclick="liveAction('分析行情')">分析行情</button><button onclick="liveAction('展示持仓')">展示持仓</button><button onclick="liveAction('聊聊人生')">聊聊人生</button></div></div></div>
+<div class="toast" id="toast"></div>
+<div class="modal" id="settingsModal"><div class="modalbox"><h2>人生设置 / 存档</h2><p>这是可离线运行的试玩原型。所有币价、交易和结局均为虚构模拟，不连接交易所。</p><label>生活方式</label><select id="living"><option value="500">泡面自行车 · ¥500/月（每日额外消耗10体力）</option><option value="1000">外卖电动车 · ¥1,000/月（每日体力不变）</option><option value="30000">保姆小汽车 · ¥30,000/月（每日恢复10体力）</option><option value="200000">私厨私人司机 · ¥200,000/月（每日恢复20体力）</option></select><p id="livingHint" style="color:#a7b7ce;font-size:13px">生活费按日自动扣除（月消费÷30）。每日体力修正：泡面自行车-10，外卖电动车0，保姆小汽车+10，私厨私人司机+20。现金不足时，可选择借贷或直接结算人生。</p><button onclick="saveLiving()">保存生活方式</button> <button onclick="saveGame()">保存存档</button> <button onclick="loadGame()">读取存档</button> <button onclick="resetGame()">重开人生</button> <button onclick="closeModal('settingsModal')">关闭</button></div></div>
+<div class="modal" id="endModal"><div class="modalbox"><h2 id="endingTitle">人生结算</h2><div id="endingText"></div><button onclick="closeModal('endModal')">继续回味</button> <button onclick="resetGame()">重新开局</button></div></div>
+<script>
+const coins=[
+ {name:'狗头人生币',sym:'DGF',price:.4207,vol:.18,icon:'🐶'},
+ {name:'马斯克宠物币',sym:'ELONCAT',price:.0321,vol:.28,icon:'🐱'},
+ {name:'韭菜之光',sym:'JCG',price:1.207,vol:.12,icon:'🌱'},
+ {name:'前任复合币',sym:'EX',price:.0876,vol:.22,icon:'💔'},
+ {name:'AI上帝币',sym:'GODAI',price:12.45,vol:.35,icon:'🤖'},
+ {name:'躺平币',sym:'FLAT',price:.0031,vol:.08,icon:'🦥'},
+ {name:'天台币',sym:'SKY',price:6.66,vol:.25,icon:'🏢'}];
+// 仅用于将旧版本存档中的USDT余额迁移为人民币；新游戏不再使用U。
+const LEGACY_CNY_TO_USDT=1.17117/7.8464;
+let S={day:1,cash:500,usdt:0,debt:0,net:500,pnl:0,realizedCryptoRmb:0,body:78,mind:72,job:35,rank:'A4',liq:0,coin:0,lev:10,hours:0,jobStatus:'待业',jobType:'',jobTitle:'待业',shiftedToday:false,dayHours:16,hour:9,living:500,loans:[],letters:[],positions:[],events:[],history:[],high:500,low:500,ended:false,seed:8421,priceChanges:0,monthCostDay:0,applications:0,jobIncome:0,lifeSpent:0,nightBill:null,dayJobIncomeStart:0,dayRealizedStart:0,luxuries:[],kolCredibility:0,liveOpen:false,liveMessages:[],entertainmentUsed:0};
+function rand(){S.seed=(S.seed*1664525+1013904223)>>>0;return S.seed/4294967296}
+function money(n){return (n<0?'-':'')+Math.abs(n).toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2})}
+function activeCoin(){return coins[S.coin]}
+function equity(){return S.positions.reduce((a,p)=>a+p.margin+pnlPosition(p),0)}
+function pnlPosition(p){let c=coins[p.coin];return p.side==='long'?(c.price-p.entry)*p.qty:(p.entry-c.price)*p.qty}
+function networth(){return S.cash+(S.frozenCash||0)+equity()-S.debt}
+function rankFor(n){if(n===0)return'A0';if(n>0){if(n>=1e9)return'A10';if(n>=1e8)return'A9';if(n>=1e7)return'A8';if(n>=1e6)return'A7';if(n>=1e5)return'A6';if(n>=1e4)return'A5';if(n>=1e3)return'A4';if(n>=100)return'A3';return'A2'}let d=-n;if(d<100)return'-A1';if(d<1e3)return'-A2';if(d<1e4)return'-A3';if(d<1e5)return'-A4';if(d<1e6)return'-A5';if(d<1e7)return'-A6';if(d<1e8)return'-A7';if(d<1e9)return'-A8';return'-A9'}
+function toast(t){let e=document.getElementById('toast');e.textContent=t;e.style.display='block';clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>e.style.display='none',2600)}
+function logEvent(title,desc,icon='📣'){S.events.unshift({title,desc,icon,day:S.day});S.events=S.events.slice(0,20);renderEvents();document.getElementById('eventTime').textContent='第'+S.day+'天'}
+function renderCoins(){document.getElementById('coinList').innerHTML=coins.map((c,i)=>`<div class="coinrow ${i===S.coin?'selected':''}" onclick="selectCoin(${i})"><div class="coinicon">${c.icon}</div><div><div class="name">${c.name}</div><div class="sym">${c.sym}</div></div><div class="pct ${c.change>=0?'up':'down'}">${c.price.toPrecision(4)}<br>${(c.change||0)>=0?'+':''}${(c.change||0).toFixed(2)}%</div></div>`).join('')}
+function renderEvents(){document.getElementById('eventFeed').innerHTML=S.events.map(e=>`<div class="logline"><strong>第${e.day}天 · ${e.icon} ${e.title}</strong><br>${e.desc}</div>`).join('')||'暂时风平浪静。';}
+function selectCoin(i){S.coin=i;render();drawChart()}
+function render(){let n=networth();S.net=n;S.rank=rankFor(n);document.getElementById('day').textContent=S.day;document.getElementById('clock').textContent=String(S.hour).padStart(2,'0')+':00';let vlabel=document.getElementById('volatilityLabel');if(vlabel)vlabel.textContent=(S.hour>=21||S.hour<8)?'夜间高波动 · 风险加剧':'日间低波动 · 行情相对平缓';document.getElementById('jobStatusText').textContent=S.jobTitle+(S.shiftedToday?'（今日已上班）':'');
+let dayDelta=n-(S.dayStartNet||500);let dc=document.getElementById('dailyChange');dc.textContent=(dayDelta>=0?'+':'')+'¥'+money(dayDelta);dc.className=dayDelta>=0?'up':'down';
+document.getElementById('reportDay').textContent='DAY '+String(S.day).padStart(2,'0');
+document.getElementById('reportCash').textContent='¥'+money(S.cash);document.getElementById('reportPositions').textContent='¥'+money(equity());document.getElementById('reportNet').textContent='¥'+money(n);document.getElementById('reportDebt').textContent='¥'+money(S.cash+equity());
+document.getElementById('reportBody').textContent=S.body+' / 100';document.getElementById('reportBodyBar').style.width=S.body+'%';document.getElementById('reportMind').textContent=S.mind+' / 100';document.getElementById('reportMindBar').style.width=S.mind+'%';
+document.getElementById('reportJob').textContent=S.jobTitle+(S.shiftedToday?'（已上班）':'');document.getElementById('reportJobSkill').textContent=S.job+' / 100';document.getElementById('reportTime').textContent=String(S.hour).padStart(2,'0')+':00';
+renderRepayments();renderQuickPositions();document.getElementById('reportNote').textContent=S.body<10?'体力危险：继续行动可能触发住院。':'今日提醒：保证金不是可用生活费。';
+document.getElementById('positionCount').textContent=S.positions.length;let dt=new Date(2025,0,1+S.day-1);document.getElementById('date').textContent=`${dt.getFullYear()}年${dt.getMonth()+1}月${dt.getDate()}日（${'日一二三四五六'[dt.getDay()]}）`;document.getElementById('cashTop').textContent='¥'+money(S.cash);document.getElementById('networth').textContent=money(n);document.getElementById('rank').textContent=S.rank;document.getElementById('pnl').textContent=(S.pnl>=0?'+':'')+money(S.pnl);document.getElementById('pnl').className=S.pnl>=0?'up':'down';document.getElementById('debt').textContent=money(S.debt);document.getElementById('liqs').textContent=S.liq;['body','mind','job'].forEach(k=>{document.getElementById(k+'N').textContent=S[k];document.getElementById(k+'Bar').style.width=S[k]+'%'});document.getElementById('coinName').innerHTML=activeCoin().name+' <span class="symbol">'+activeCoin().sym+'</span>';document.getElementById('price').textContent=activeCoin().price.toPrecision(5);let ch=activeCoin().change||0;document.getElementById('change').textContent=(ch>=0?'+':'')+ch.toFixed(2)+'%';document.getElementById('change').className=ch>=0?'up':'down';document.getElementById('highlow').textContent='24h 高 '+(activeCoin().high||activeCoin().price).toPrecision(4)+' / 低 '+(activeCoin().low||activeCoin().price).toPrecision(4);document.getElementById('longNotional').textContent=money(Math.max(0,+document.getElementById('longMargin').value||0)*S.lev);document.getElementById('shortNotional').textContent=money(Math.max(0,+document.getElementById('shortMargin').value||0)*S.lev);document.getElementById('marginPct').textContent=(100/S.lev).toFixed(1)+'%';renderCoins();drawChart();renderQuickPositions()}
+function syncMargin(side){let range=document.getElementById(side+'Range'),input=document.getElementById(side+'Margin');let pct=Number(range.value)/100;input.value=(Math.max(0,S.cash)*pct).toFixed(2);render()}
+function updateRangeFromInput(side){let input=document.getElementById(side+'Margin'),range=document.getElementById(side+'Range');let cash=Math.max(0,S.cash);range.value=cash>0?Math.max(0,Math.min(100,Number(input.value)/cash*100)):0;render()}
+function trade(side){if(S.ended)return;if(S.body<=0)return toast('体力见底了，先停止交易。');let m=Number(document.getElementById(side+'Margin').value);if(!Number.isFinite(m)||m<=0)return toast('保证金得是个正数。');if(m>S.cash)return toast('可用人民币余额不足。');let tpRaw=document.getElementById(side+'TP').value,slRaw=document.getElementById(side+'SL').value;let tp=tpRaw===''?null:Number(tpRaw),sl=slRaw===''?null:Number(slRaw);if((tp!==null&&(!Number.isFinite(tp)||tp<=0))||(sl!==null&&(!Number.isFinite(sl)||sl<=0)))return toast('止盈止损请输入大于0的人民币金额，或留空不设置。');let c=activeCoin();let notional=m*S.lev;let fee=notional*.001;if(m+fee>S.cash)return toast('可用人民币不足以支付保证金和手续费。');spendStamina(5,'开立合约');S.cash-=m+fee;S.pnl-=fee;S.positions.push({coin:S.coin,side,margin:m,lev:S.lev,entry:c.price,qty:notional/c.price,fee,day:S.day,tpRmb:tp,slRmb:sl});logEvent(side==='long'?'你开了多单':'你开了空单',`${c.sym} · ${S.lev}x · 保证金 ¥${money(m)}，名义仓位 ¥${money(notional)}。${tp===null?'未设置止盈':`止盈 +¥${money(tp)}`}; ${sl===null?'未设置止损':`止损 -¥${money(sl)}`}。手续费 ¥${money(fee)}。`,'⚡');render();if(S.jobType==='kol'&&S.liveOpen)addLiveChat('交易操作');toast('开仓成功。止盈止损按人民币盈亏金额计算。')}
+function closePosition(i,liquidated=false){
+ let p=S.positions[i];if(!p)return;let c=coins[p.coin],gross=pnlPosition(p),closeFee=Math.abs(p.qty*c.price)*.001,netPnl=gross-closeFee;
+ let returned=Math.max(0,p.margin+netPnl);if(returned===0&&gross< -p.margin)S.debt+=Math.abs(gross+p.margin);
+ S.cash+=returned;if(netPnl>0)S.realizedCryptoRmb+=netPnl;S.pnl+=netPnl;if(liquidated)S.liq++;S.positions.splice(i,1);
+ let conversion=netPnl>0?'盈利已直接计入人民币余额 ¥'+money(netPnl)+'。':'';
+ logEvent(liquidated?'仓位被强平':'你手动平仓',`${c.sym} ${p.side==='long'?'多单':'空单'}，本次盈亏 ¥${money(netPnl)}。${conversion}`,liquidated?'💥':'🔔');if(S.jobType==='kol'&&S.liveOpen)addLiveChat(netPnl>=0?'交易盈利':'交易亏损');
+}
+function setLeverage(n){S.lev=n;document.querySelectorAll('#levButtons button').forEach(b=>b.classList.toggle('active',+b.textContent.replace('x','')===n));render()}
+function switchTab(btn,tab){document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');let market=tab==='market';document.getElementById('marketView').style.display=market?'block':'none';document.getElementById('otherView').style.display=market?'none':'block';let title={positions:'持仓',orders:'委托记录',assets:'资产明细'}[tab];document.getElementById('otherTitle').textContent=title;let html='';if(tab==='positions'){html=S.positions.map((p,i)=>`<div class="logline"><b>${coins[p.coin].name} · ${p.side==='long'?'做多':'做空'} ${p.lev}x</b><br>开仓价 ${p.entry.toPrecision(5)} · 保证金 ¥${money(p.margin)} · 浮动盈亏 <b class="${pnlPosition(p)>=0?'up':'down'}">¥${money(pnlPosition(p))}</b><br><button onclick="closePosition(${i})">平仓</button></div>`).join('')||'当前没有持仓。空仓也是一种仓位管理。'}else if(tab==='orders'){html=S.events.filter(e=>e.title.includes('开')||e.title.includes('平')||e.title.includes('强平')).map(e=>`<div class="logline">第${e.day}天 · ${e.title}<br>${e.desc}</div>`).join('')||'暂无交易记录。'}else{html=`<div class="logline">现金：¥${money(S.cash)}</div><div class="logline">持仓保证金及浮动盈亏：¥${money(equity())}</div><div class="logline">负债：¥${money(S.debt)}</div><div class="logline">净资产：¥${money(networth())}（${rankFor(networth())}）</div><div class="logline">累计已实现盈亏：¥${money(S.pnl)}</div><div class="logline">累计工资收入：¥${money(S.jobIncome)}</div><div class="logline">累计生活支出：¥${money(S.lifeSpent)}</div>`}document.getElementById('otherContent').innerHTML=html}
+function rightTab(btn,tab){document.querySelectorAll('.righttabs button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.getElementById('coinsView').style.display=tab==='coins'?'block':'none';document.getElementById('eventsView').style.display=tab==='events'?'block':'none'}
+function spendStamina(amount,reason='行动'){S.body=Math.max(0,S.body-amount);if(S.body<10){let fee=Math.min(Math.max(100,Math.round(Math.abs(networth())*.08)),Math.max(100,S.cash+Math.max(0,networth())));let paid=Math.min(S.cash,fee);S.cash-=paid;if(paid<fee)S.debt+=fee-paid;S.body=35;S.mind=Math.max(0,S.mind-10);logEvent('体力透支，被送进医院',`你因${reason}体力低于10，被送医治疗。医疗费 ¥${money(fee)}，现金不足部分记为负债。`,'🏥');toast(`体力透支！医院费用 ¥${money(fee)}。身体不是无限续航。`)}}
+function action(a){if(S.ended)return;if(a==='炒币'){S.mind=Math.max(0,S.mind-1);toast('每次开立合约消耗5点体力。')}else if(a==='社交'){spendStamina(2,'社交活动');S.mind=Math.min(100,S.mind+3);if(rand()<.25){S.debt+=300;logEvent('朋友邀你聚餐','AA制听起来很公平，直到你发现自己现金只剩三位数。','🍜');toast('社交触发开销：新增 ¥300 负债。')}else toast('聊了聊近况，精神稍有好转。')}else if(a==='消费'){openModal('settingsModal');toast('可以在设置里切换生活方式；升级会增加每月开销。')}}
+function openJobModal(){if(S.ended)return;let opt=document.getElementById('kolJobOption');if(opt){opt.disabled=!isKolUnlocked();opt.textContent=isKolUnlocked()?'KOL主播｜已解锁（直播工作）':'KOL主播｜需解锁（资产段位达到 A7 或 -A7）'}document.getElementById('jobModal').style.display='flex'}
+function applyJob(){if(S.ended)return;let type=document.getElementById('jobChoice').value;if(type==='kol'&&Math.abs(networth())<1e7)return toast('KOL职业尚未解锁：需要净资产达到 A7 或负资产段位 -A7。');let jobs={office:{title:'普通职员',salary:4500,cost:12,chance:.58},factory:{title:'工厂流水线',salary:6000,cost:22,chance:.72},delivery:{title:'外卖骑手',salary:7000,cost:28,chance:.66},freelance:{title:'自由职业',salary:3000,cost:8,chance:.42},kol:{title:'KOL主播',salary:0,cost:5,chance:.8}};let j=jobs[type];spendStamina(3,'投递简历');S.job=Math.min(100,S.job+4);S.applications++;if(rand()<j.chance+S.job/250){S.jobType=type;S.jobTitle=j.title;S.jobStatus='已就业';logEvent('求职有了结果',`你获得「${j.title}」岗位。参考月收入 ¥${money(j.salary)}，每次上班消耗体力 ${j.cost}。`,'💼');toast(`Offer 到手：${j.title}！记得每天去上班。`)}else{toast(`已投递「${j.title}」，暂时没有回音。竞争力 +4。`)}closeModal('jobModal');render()}
+function goToWork(){if(S.ended)return;if(S.shiftedToday)return toast('今天已经上过班了。再卷也不会多发一份工资。');if(S.jobStatus==='待业')return toast('你还没有工作。先去「找工作」投递岗位。');let jobs={office:{salary:4500,cost:12,title:'普通职员'},factory:{salary:6000,cost:22,title:'工厂流水线'},delivery:{salary:7000,cost:28,title:'外卖骑手'},freelance:{salary:3000,cost:8,title:'自由职业'},kol:{salary:0,cost:5,title:'KOL主播'}};let j=jobs[S.jobType]||jobs.office;S.shiftedToday=true;for(let h=0;h<8;h++){S.hour=(S.hour+1)%24;settleHourlyMarket();}spendStamina(Math.ceil(j.cost),'上班');let overtime=rand()<.28;let extra=overtime?Math.floor(rand()*4)+1:0;document.getElementById('waitTitle').textContent=overtime?'临时通知：今天要加班':'正在上班……';document.getElementById('waitText').textContent=overtime?`本来准备下班了，主管说项目今晚必须交。额外加班 ${extra} 小时（没有额外加班费）。`:`你在「${j.title}」的工位上坐下。8小时后，工资会进入结算。`;document.getElementById('waitOverlay').style.display='flex';setTimeout(()=>{document.getElementById('waitOverlay').style.display='none';let daily=j.salary/30;let overtimePay=0;let grossEarned=daily;let sleepPenalty=0;let earned=grossEarned;S.cash+=earned;S.jobIncome+=earned;if(S.jobType==='kol'){openLive(true);logEvent('KOL开播','你开启了今天的直播，弹幕开始根据你的操作实时生成。','📹')}if(overtime){for(let h=0;h<extra;h++){S.hour=(S.hour+1)%24;settleHourlyMarket();}spendStamina(Math.ceil(extra*2),'加班');logEvent('突发加班',`你在「${j.title}」额外工作 ${extra} 小时，加班不增加工资。`,'⌛')}logEvent('下班打卡',`完成8小时工作，实发 ¥${money(earned)}。${overtime?'今天临时加班，但没有额外加班费。':'今天准时下班。'}`,'💴');render();toast(`下班了，入账 ¥${money(earned)}。`);},overtime?3600:2600)}
+function startGame(){let e=document.getElementById('intro');e.classList.add('fade');setTimeout(()=>e.style.display='none',600);S.dayJobIncomeStart=S.jobIncome;S.dayRealizedStart=S.realizedCryptoRmb;render();}
+function showQuickPositions(){let box=document.getElementById('quickPositions');box.style.display=box.style.display==='none'?'block':'none';renderQuickPositions()}
+function renderQuickPositions(){let box=document.getElementById('quickPositions');if(!box)return;box.innerHTML=S.positions.length?'<div class="panelhead">当前持仓 · 点击平仓将结算资金</div>'+S.positions.map((p,i)=>`<div class="logline"><b>${coins[p.coin].name} ${p.side==='long'?'做多':'做空'} ${p.lev}x</b><br>保证金 ¥${money(p.margin)} · 开仓价 ${p.entry.toPrecision(5)}<br>浮动盈亏：<b class="${pnlPosition(p)>=0?'up':'down'}">¥${money(pnlPosition(p))}</b> <button onclick="quickClose(${i})">立即平仓</button></div>`).join(''):'<div class="logline">当前无持仓。开仓后可以在这里直接平仓。</div>'}
+function quickClose(i){closePosition(i);render();renderQuickPositions();toast('平仓已结算，返还资金已计入现金资产。')}
+function borrowForLiving(type='campus'){
+ let daily=S.living/30, need=Math.max(100,Math.ceil((daily-S.cash)/100)*100), loan;
+ if(type==='mom')loan={name:'妈妈培训费周转',principal:need,rate:0};
+ else if(type==='elephant')loan={name:'大象花呗',principal:Math.max(500,need),rate:1.8};
+ else loan={name:'校园小额贷款',principal:Math.max(300,need),rate:.9};
+ S.cash+=loan.principal;S.debt+=loan.principal;loan.interest=0;S.loans.push(loan);
+ closeModal('livingShortModal');logEvent('生活费周转借款',`通过「${loan.name}」借入 ¥${money(loan.principal)}，模拟年化利率 ${(loan.rate*100).toFixed(0)}%。${type==='mom'?'妈妈暂时没有收利息，但这笔钱仍要还。':'借款利息将随游戏时间累计。'}`,'💳');
+ if(S.cash>=daily){S.cash-=daily;S.lifeSpent+=daily;S._livingPaidToday=true;logEvent('每日生活费扣款',`周转后支付今日生活费 ¥${money(daily)}。`,'🧾')}
+ render();toast(`借款到账 ¥${money(loan.principal)}，已记录还款义务。`);
+ if(S._sleepAfterLivingShort){S._sleepAfterLivingShort=false;sleepNow();}
+}
+function renderRepayments(){let el=document.getElementById('repaymentPanel');if(!el)return;if(!S.loans||!S.loans.length){el.innerHTML='<div class="logline">暂无借款记录。借款后，这里会显示本金、累计利息和还款入口。</div>';return;}el.innerHTML=S.loans.map((l,i)=>{let interest=Number(l.interest||0),due=l.principal+interest;return `<div class="logline"><b>${l.name}</b><br>待还本金：¥${money(l.principal)}<br>累计利息：¥${money(interest)}<br><b>合计应还：¥${money(due)}</b><br><button onclick="repayLoan(${i})" ${S.cash<due?'disabled':''}>偿还本金与利息</button></div>`}).join('')}
+function repayLoan(i){let l=S.loans[i];if(!l)return;let due=l.principal+Number(l.interest||0);if(S.cash<due)return toast(`现金不足，还需 ¥${money(due)}。`);S.cash-=due;S.debt=Math.max(0,S.debt-due);logEvent('偿还借款',`已向「${l.name}」偿还本金及利息，共 ¥${money(due)}。`,'💴');S.loans.splice(i,1);render();toast('借款已还清。')}
+
+function settleNow(){closeModal('livingShortModal');settle()}
+function openPhone(){renderPhone();openModal('phoneModal')}
+function phoneTab(which,btn){document.querySelectorAll('#phoneModal .tabs button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.getElementById('phoneLoans').style.display=which==='loans'?'block':'none';document.getElementById('phoneLetters').style.display=which==='letters'?'block':'none';}
+function renderPhone(){document.getElementById('unreadCount').textContent=S.letters.filter(x=>!x.read).length;document.getElementById('familyInbox').innerHTML=S.letters.length?S.letters.map((m,i)=>`<div class="newsitem"><div class="newsicon">✉️</div><div><b>${m.title}</b><p>${m.text}</p><small>第${m.day}天 · ${m.time}:00</small><br><button onclick="readLetter(${i})">${m.read?'已读':'查看并回复'}</button></div></div>`).join(''):'暂时没有新消息。也许家里以为你在认真准备毕业。'}
+function readLetter(i){let m=S.letters[i];if(!m)return;m.read=true;if(!m.replied){m.replied=true;if(rand()<.35){S.cash+=200;logEvent('家人转来生活费','家人给你转了 ¥200，让你先把毕业的事安排好。','✉️');toast('收到家人转账 ¥200。')}else{S.mind=Math.min(100,S.mind+3);toast('你回了消息，家人暂时放心了。')}}renderPhone();render()}
+function takeLoan(type){if(S.ended)return;let L={bank:{name:'青年信用贷',amount:2000,rate:.12},app:{name:'极速钱包',amount:5000,rate:.36},campus:{name:'校园周转金',amount:800,rate:.18},shark:{name:'私人周转',amount:10000,rate:1.2}}[type];S.cash+=L.amount;S.debt+=L.amount;S.loans.push({name:L.name,principal:L.amount,rate:L.rate});logEvent('新增借款',`通过「${L.name}」借入 ¥${money(L.amount)}，模拟年化利率 ${(L.rate*100).toFixed(0)}%。本金已计入负债。`,'💳');closeModal('phoneModal');render();toast(`到账 ¥${money(L.amount)}。负债同步增加，借来的钱不是盈利。`)}
+function advanceHour(){if(S.ended)return;S.hour++;if(S.hour>=24)S.hour=0;if(S.hour>=3&&S.hour<=8)S.lateSleep=true;settleHourlyMarket();if(S.jobType==='kol'&&S.liveOpen&&rand()<.7)addLiveChat('交易操作');if(S.loans.length){for(const l of S.loans){let interest=l.principal*l.rate/(365*24);l.interest=(l.interest||0)+interest;S.debt+=interest;}}if(rand()<.07){let samples=[['妈','最近生活费够不够？别总熬夜，毕业论文也要记得写。'],['爸','工作有着落了吗？实在不行先找份正经工作。'],['家人群','周末回来吃饭吗？你最近怎么总不接电话。'],['妈妈','天冷了记得添衣服。钱不够就跟家里说，别乱借钱。']];let m=samples[Math.floor(rand()*samples.length)];S.letters.unshift({title:m[0]+'发来一条消息',text:m[1],day:S.day,time:S.hour,read:false,replied:false});logEvent('收到家人来信',m[1],'✉️')}render();drawChart();if(document.getElementById('phoneModal').style.display==='flex')renderPhone();toast(`游戏时间 ${String(S.hour).padStart(2,'0')}:00：全市场币价已结算。`)}
+function settleHourlyMarket(){for(let c of coins){let old=c.price;let volMult=(S.hour>=21||S.hour<8)?2.1:.42;let shock=rand()<(S.hour>=21||S.hour<8?.16:.035)?(rand()-.5)*c.vol*4*volMult:0;let move=(rand()-.49)*c.vol*1.8*volMult+shock;c.price=Math.max(.000001,c.price*(1+move));c.change=(c.price/old-1)*100;c.high=Math.max(c.high||c.price,c.price);c.low=Math.min(c.low||c.price,c.price);c.hist=c.hist||[];c.hist.push(c.price);if(c.hist.length>48)c.hist.shift()}for(let i=S.positions.length-1;i>=0;i--){let p=S.positions[i];let pl=pnlPosition(p);if(p.tpRmb!==null&&p.tpRmb!==undefined&&pl>=p.tpRmb){closePosition(i,false);logEvent('止盈触发',`本仓浮动盈利达到 ¥${money(p.tpRmb)}，系统自动平仓。`,'🟢');continue}if(p.slRmb!==null&&p.slRmb!==undefined&&pl<=-p.slRmb){closePosition(i,false);logEvent('止损触发',`本仓浮动亏损达到 ¥${money(p.slRmb)}，系统自动平仓。`,'🛑');continue}if(pl<=-p.margin*.85){if(p.slRmb===null||p.slRmb===undefined){S.cash=0;S.positions=[];S.debt=0;S.liq++;logEvent('爆仓：资金清零',`${coins[p.coin].sym} 仓位未设置止损，触发爆仓。手中所有可用资金与其他持仓全部清零。`,'💥');break}else{closePosition(i,true)}}}}
+function showDayTransition(){let o=document.getElementById('waitOverlay');document.getElementById('waitTitle').textContent='一天结束了';document.getElementById('waitText').textContent='城市的霓虹熄灭又亮起，行情正在生成下一根K线……';o.style.display='flex';setTimeout(()=>{o.style.display='none'},1500)}
+function openBedtime(){renderBedtimeBill();openModal('bedtimeModal')}
+function renderBedtimeBill(){
+ let h=S.hour, daily=S.living/30;
+ let income=S.jobIncome-(S.dayJobIncomeStart||S.jobIncome);
+ let realizedRmb=S.realizedCryptoRmb-(S.dayRealizedStart||S.realizedCryptoRmb);
+ let recovery=(h>=8&&h<24)?70:Math.max(30,70-(h+1)*5), unrealized=equity();
+ const lifestyle={500:'泡面自行车',1000:'外卖电动车',30000:'保姆小汽车',200000:'私厨私人司机'}[S.living]||'自定义生活方式';
+ document.getElementById('bedtimeBill').innerHTML=
+ `<div>生活方式：<b>${lifestyle}</b></div>
+ <div>生活方式扣费：<b>¥${money(daily)}</b>（今日自动扣款）</div>
+ <div>今日工作收入：<b>¥${money(Math.max(0,income))}</b></div>
+ <div>当前游戏时间：<b>${String(S.hour).padStart(2,'0')}:00</b></div><div>当前体力：<b>${S.body}/100</b>；睡到08:00预计恢复 <b>${recovery} 点</b></div>
+ <div style="color:#c9ff45">当前可用人民币：¥${money(S.cash)}</div>`;
+}
+function sleepNow(){
+ if(S.ended)return;
+ let h=S.hour, recovery=((h>=8&&h<24)?70:Math.max(30,70-(h+1)*5)), daily=S.living/30;
+ let income=S.jobIncome-(S.dayJobIncomeStart||S.jobIncome);
+ let realized=S.realizedCryptoRmb-(S.dayRealizedStart||S.realizedCryptoRmb);
+ S.nightBill={day:S.day,living:daily,jobIncome:income,realizedCryptoRmb:realized,unrealizedRmb:equity(),recovery};
+ if(!S._livingPaidToday){
+  if(S.cash>=daily){S.cash-=daily;S.lifeSpent+=daily;S._livingPaidToday=true;logEvent('睡前生活账单',`生活方式扣款 ¥${money(daily)}；今日工作收入 ¥${money(Math.max(0,income))}。`,'🧾');}
+  else{
+   document.getElementById('livingShortText').textContent=`今日生活费 ¥${money(daily)}，当前可用现金 ¥${money(S.cash)}。请选择一种周转方式，借款到账并支付生活费后即可继续睡觉。`;
+   S._sleepAfterLivingShort=true;openModal('livingShortModal');render();return;
+  }
+ }
+ S._livingPaidToday=false;S.dayJobIncomeStart=S.jobIncome; S.dayRealizedStart=S.realizedCryptoRmb;
+ nextDay(true); S.hour=8; S.body=Math.min(100,S.body+recovery); render();
+ toast(`游戏时间 ${String(h).padStart(2,'0')}:00 入睡，睡到08:00，恢复${recovery}点体力。`);
+}
+function nextDay(sleepAlreadyCharged=false){
+ if(S.ended)return;showDayTransition();for(let h=0;h<8;h++)settleHourlyMarket();
+ S.day++;S.hour=sleepAlreadyCharged?8:9;S.shiftedToday=false;S.lateSleep=false;
+ S.dayStartNet=networth();S.dayStartPnl=S.pnl;S.dayJobIncomeStart=S.jobIncome;S.dayRealizedStart=S.realizedCryptoRmb;
+ S.body=Math.max(0,S.body-2);S.mind=Math.max(0,S.mind-1);
+ {let c=coins[Math.floor(rand()*coins.length)];let headlines=[`${c.sym} 社区传出利好传闻，短线交易员开始押注。`,`分析师下调对 ${c.sym} 的预期，市场情绪转谨慎。`,`链上数据显示 ${c.sym} 交易活跃度变化，社媒讨论升温。`,`关于 ${c.sym} 的监管与项目进展消息引发争论。`,`大户转账引起关注，${c.sym} 波动风险上升。`];logEvent(`${c.sym} 今日币圈新闻`,headlines[Math.floor(rand()*headlines.length)],'🗞️');}
+ for(let i=S.positions.length-1;i>=0;i--){let p=S.positions[i];if(pnlPosition(p)<=-p.margin*.85)closePosition(i,true)}
+ if(!sleepAlreadyCharged){let dailyLiving=S.living/30;if(S.cash>=dailyLiving){S.cash-=dailyLiving;S.lifeSpent+=dailyLiving;logEvent('每日生活费扣款',`今日自动扣除 ¥${money(dailyLiving)}。`,'🧾')}else{document.getElementById('livingShortText').textContent=`今日生活费 ¥${money(dailyLiving)}，当前可用现金 ¥${money(S.cash)}。你可以借贷周转，或直接结束本局并结算。`;document.querySelector('#livingShortModal button[onclick="borrowForLiving()"]') .style.display='inline-block';openModal('livingShortModal');S.lifeSpent+=dailyLiving}}
+ if(S.living===500)spendStamina(10,'泡面自行车生活方式');else if(S.living===30000)S.body=Math.min(100,S.body+10);else if(S.living===200000)S.body=Math.min(100,S.body+20);
+ let n=networth();S.high=Math.max(S.high,n);S.low=Math.min(S.low,n);
+ if(S.day===7)logEvent('毕业季倒计时','同学开始晒实习，你开始研究资金费率。','🎓');if(S.day===30)logEvent('第一个月结束','500元已经经历了第一轮市场教育。','📆');if(S.day===90)logEvent('人生第一次大考','毕业、求职、合约：每一项都不接受“再来一次”。','📝');if(S.day===180)logEvent('半年过去了','你发现最稀缺的资产，可能不是本金，而是时间。','⌛');
+ if(S.day>=730){settle();return}render();drawChart();toast(`第 ${S.day} 天开始。币价刷新，别忘了看持仓。`)
+}
+function settle(){S.positions.slice().forEach((p)=>{let i=S.positions.indexOf(p);if(i>=0)closePosition(i)});S.ended=true;let n=networth(),r=rankFor(n);document.getElementById('endingTitle').textContent=`最终结算：${r}`;document.getElementById('endingText').innerHTML=`<p>游戏时间：${S.day} 天（两年强制结算）</p><p>最终净资产：<b style="color:${n>=0?'#00e59a':'#ff4564'}">¥${money(n)}</b></p><p>初始本金：¥500 · 累计交易盈亏：¥${money(S.pnl)} · 累计工资：¥${money(S.jobIncome)} · 生活支出：¥${money(S.lifeSpent)}</p><p>历史最高净资产：¥${money(S.high)} · 历史最低净资产：¥${money(S.low)} · 强平次数：${S.liq} · 最终负债：¥${money(S.debt)}</p><p>${n>=1e6?'你把概率游戏玩成了资本神话。但别忘了：这只是虚构模拟。':n>=0?'你没有成为传说，但至少走到了结算日。':`账单不会因为行情反弹而消失。最终净资产决定你的段位，不是故事替你决定。`}</p>`;openModal('endModal');render()}
+
+const luxuryCatalog=[{id:'watch',name:'限量机械腕表',price:88000,emoji:'⌚',desc:'镜头一晃，观众先看见表。'},{id:'bag',name:'设计师皮具',price:56000,emoji:'👜',desc:'包装比生活费更有质感。'},{id:'car',name:'豪华跑车',price:680000,emoji:'🏎️',desc:'只提供人设与排面，不增加任何属性。'},{id:'jewelry',name:'高级珠宝',price:128000,emoji:'💎',desc:'闪光灯下的昂贵反光。'},{id:'fashion',name:'高定服饰',price:36000,emoji:'🧥',desc:'看起来像成功人士，不代表真的成功。'},{id:'penthouse',name:'顶层公寓体验',price:220000,emoji:'🏙️',desc:'奢华消费品，不产生收益。'}];
+const entertainmentCatalog=[{id:'ktv',name:'私人 KTV 包厢',price:1800,hours:3,emoji:'🎤',desc:'三小时高音、香槟和朋友圈素材。'},{id:'massage',name:'高端 SPA 按摩',price:1200,hours:2,emoji:'🧖',desc:'两小时放空，钱包变轻但没有额外收益。'},{id:'bar',name:'精品酒吧卡座',price:2600,hours:4,emoji:'🍸',desc:'灯光很好，明天的账单也很真实。'},{id:'club',name:'私人会所夜场',price:6800,hours:5,emoji:'🥂',desc:'一整晚的浮华，无法折算成盈利。'},{id:'dining',name:'主厨品鉴晚宴',price:3200,hours:3,emoji:'🍽️',desc:'多道菜与缓慢流逝的时间。'}];
+function openShop(){renderShop();openModal('shopModal')}
+function renderShop(){let el=document.getElementById('shopItems');el.innerHTML=luxuryCatalog.map(x=>{let owned=(S.luxuries||[]).includes(x.id);return `<div class="luxury-card"><div style="font-size:30px">${x.emoji}</div><b>${x.name}</b><p>${x.desc}</p><div>¥${money(x.price)}</div><button style="margin-top:8px" ${owned?'disabled':''} onclick="buyLuxury('${x.id}')">${owned?'已购入':'购买'}</button></div>`}).join('');document.getElementById('shopStatus').textContent=`可用现金 ¥${money(S.cash)} · 已拥有 ${((S.luxuries)||[]).length} 件奢侈品${S.jobType==='kol'?` · KOL可信度 +${S.kolCredibility||0}`:''}`}
+function buyLuxury(id){let x=luxuryCatalog.find(z=>z.id===id);if(!x)return;if(S.cash<x.price)return toast('现金不足，奢侈品柜台不接受梦想分期。');S.cash-=x.price;S.luxuries=S.luxuries||[];if(!S.luxuries.includes(id))S.luxuries.push(id);logEvent('购入奢侈品',`你花费 ¥${money(x.price)} 购买「${x.name}」。它不增加任何属性。${S.jobType==='kol'?'作为KOL人设，可信度有所提升。':''}`,x.emoji);if(S.jobType==='kol')S.kolCredibility=(S.kolCredibility||0)+S.luxuries.length*3;renderShop();render();toast('购入成功：不增加属性，只增加消费记录。')}
+function openEntertainment(){renderEntertainment();openModal('entertainmentModal')}
+function renderEntertainment(){document.getElementById('entertainmentItems').innerHTML=entertainmentCatalog.map(x=>`<div class="luxury-card"><div style="font-size:30px">${x.emoji}</div><b>${x.name}</b><p>${x.desc}</p><div>¥${money(x.price)} · ${x.hours} 小时</div><button style="margin-top:8px" onclick="startEntertainment('${x.id}')">前往消费</button></div>`).join('')}
+function startEntertainment(id){let x=entertainmentCatalog.find(z=>z.id===id);if(!x)return;if(S.ended)return;if(S.cash<x.price)return toast('现金不足，无法支付这次娱乐消费。');S.cash-=x.price;S.lifeSpent+=x.price;S.entertainmentUsed=(S.entertainmentUsed||0)+1;for(let h=0;h<x.hours;h++){S.hour=(S.hour+1)%24;settleHourlyMarket();}closeModal('entertainmentModal');document.getElementById('cinemaTitle').textContent=x.name;document.getElementById('cinemaEmoji').textContent=x.emoji;document.getElementById('cinemaDescription').textContent=`你在${x.name}度过了 ${x.hours} 小时，消费 ¥${money(x.price)}。没有收益，也没有属性加成。城市继续运转，行情也不会等你。`;openModal('cinematicModal');logEvent('高端娱乐消费',`${x.name}：花费 ¥${money(x.price)}，占用 ${x.hours} 小时，无额外收益。`,x.emoji);render()}
+function finishCinematic(){closeModal('cinematicModal');toast('过场结束，回到现实。');render()}
+function isKolUnlocked(){return Math.abs(networth())>=1e7}
+function openLive(auto=false){if(S.jobType!=='kol'&&!isKolUnlocked())return toast('直播功能暂未解锁：先把净资产做到 A7 或 -A7，再申请KOL职业。');if(S.jobType!=='kol'&&isKolUnlocked()&&!auto)return toast('已解锁KOL职业，请先在「找工作」中申请KOL主播。');S.liveOpen=true;renderLive();openModal('liveModal');if(auto)toast('KOL直播已开启，观众正在进场。')}
+function renderLive(){let el=document.getElementById('streamChat');if(!el)return;el.innerHTML=(S.liveMessages||[]).slice(-40).map(m=>`<div class="chatline"><b>${m.user}：</b>${m.text}</div>`).join('');el.scrollTop=el.scrollHeight;document.getElementById('liveStatus').textContent=`第${S.day}天 · ${String(S.hour).padStart(2,'0')}:00 · 可信度 ${S.kolCredibility||0} · 奢侈品 ${((S.luxuries)||[]).length} 件`}
+function addLiveChat(context){if(S.jobType!=='kol'||!S.liveOpen)return;let groups={trade:[['弹幕哥','又开单？止损设了吗兄弟'],['杠精','这操作我奶奶都会反着做'],['小白','主播能带带我吗想拜师'],['路人甲','别吹了先把本金赚回来'],['超管候补','这波分析有点东西'] ],profit:[['火箭哥','牛啊！这波真吃到了？'],['酸民','运气而已，下一单就还回去'],['徒弟申请','主播收徒吗？我有500块'],['老观众','先落袋为安吧'] ],loss:[['哈哈怪','绷不住了，又绿了'],['担心哥','哥，先停一下吧'],['新韭菜','这是不是抄底机会？'],['杠精','这水平还教人？'] ],luxury:[['排面党','这表是真货吗？'],['质疑哥','租的吧？有购买记录吗'],['小白','主播可以教我怎么做交易吗？']],general:[['夜猫子','主播还不下播？'],['求带哥','能不能教我做合约'],['弹幕审核','注意言辞，别刷屏'],['路人','听不懂但感觉很厉害'] ]};let key=context==='交易盈利'?'profit':context==='交易亏损'?'loss':context==='展示奢侈品'?'luxury':context==='交易操作'?'trade':'general';let pool=groups[key]||groups.general;let count=1+(rand()<.4?1:0);for(let i=0;i<count;i++){let m=pool[Math.floor(rand()*pool.length)];S.liveMessages=S.liveMessages||[];S.liveMessages.push({user:m[0],text:m[1]});}S.liveMessages=S.liveMessages.slice(-60);renderLive()}
+function liveAction(action){if(!S.liveOpen)return;if(action==='分析行情'){addLiveChat('交易操作')}else if(action==='展示持仓'){addLiveChat('展示奢侈品');if((S.luxuries||[]).length)addLiveChat('展示奢侈品')}else{addLiveChat('闲聊')}toast('直播互动已更新，弹幕根据当前行为生成。')}
+
+function saveLiving(){S.living=+document.getElementById('living').value;closeModal('settingsModal');toast('生活方式已保存：¥'+money(S.living)+'/月。');render()}
+function saveGame(){localStorage.setItem('suohaLifeSave',JSON.stringify({S,coins}));toast('存档已保存在当前浏览器。')}
+function loadGame(){let raw=localStorage.getItem('suohaLifeSave');if(!raw)return toast('没有找到存档。');try{let d=JSON.parse(raw);S=d.S;if(S.usdt===undefined)S.usdt=0;if(S.cash===undefined)S.cash=0;if(S.usdt>0){S.cash+=S.usdt/LEGACY_CNY_TO_USDT;S.usdt=0;}if(S.realizedCryptoRmb===undefined)S.realizedCryptoRmb=0;d.coins.forEach((c,i)=>Object.assign(coins[i],c));closeModal('settingsModal');render();drawChart();toast('读取存档成功。')}catch(e){toast('存档读取失败。')}}
+function resetGame(){if(!confirm('确定重新开始？当前进度会丢失（除非已保存存档）。'))return;S={day:1,cash:500,usdt:0,debt:0,net:500,pnl:0,realizedCryptoRmb:0,body:78,mind:72,job:35,rank:'A4',liq:0,coin:0,lev:10,hours:0,jobStatus:'待业',jobType:'',jobTitle:'待业',shiftedToday:false,dayHours:16,hour:9,living:500,loans:[],letters:[],living:500,positions:[],events:[],history:[],high:500,low:500,ended:false,seed:8421,priceChanges:0,monthCostDay:0,applications:0,jobIncome:0,lifeSpent:0,nightBill:null,dayJobIncomeStart:0,dayRealizedStart:0,luxuries:[],kolCredibility:0,liveOpen:false,liveMessages:[],entertainmentUsed:0};coins.forEach((c,i)=>{c.price=[.4207,.0321,1.207,.0876,12.45,.0031,6.66][i];c.change=0;c.high=c.price;c.low=c.price});closeModal('endModal');closeModal('settingsModal');render();drawChart();logEvent('重新开局','你再次拿着500元人民币，走进市场。所有资产统一以人民币结算。','🪙')}
+function openModal(id){document.getElementById(id).style.display='flex'}function closeModal(id){document.getElementById(id).style.display='none'}
+function drawChart(){let cv=document.getElementById('chart'),ctx=cv.getContext('2d'),w=cv.width,h=cv.height;ctx.clearRect(0,0,w,h);ctx.strokeStyle='#26344a';ctx.lineWidth=1;for(let i=0;i<6;i++){let y=i*h/5;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}for(let i=0;i<9;i++){let x=i*w/8;ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke()}let c=activeCoin(),hist=c.hist||[];if(!hist.length){let p=c.price;hist=Array.from({length:48},(_,i)=>p*(.65+.35*i/47)*(1+(Math.sin(i*.75)*.07)));c.hist=hist}let min=Math.min(...hist)*.9,max=Math.max(...hist)*1.1,range=max-min||1;let yv=p=>h-((p-min)/range)*(h-30)-15;let step=w/(hist.length+2);ctx.strokeStyle='#f8b74e';ctx.lineWidth=2;ctx.beginPath();hist.forEach((p,i)=>{let x=(i+1)*step,y=yv(p);i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke();ctx.strokeStyle='#399aff';ctx.beginPath();hist.forEach((p,i)=>{let x=(i+1)*step,y=yv(p*.92+min*.08);i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke();hist.forEach((p,i)=>{let x=(i+1)*step,y=yv(p),prev=hist[Math.max(0,i-1)],up=p>=prev;ctx.strokeStyle=up?'#00d99a':'#ff4f6d';ctx.fillStyle=ctx.strokeStyle;ctx.beginPath();ctx.moveTo(x,y-9);ctx.lineTo(x,y+9);ctx.stroke();ctx.fillRect(x-step*.22,Math.min(y,yv(prev)),Math.max(3,step*.44),Math.max(3,Math.abs(y-yv(prev))))});let bars=48;for(let i=0;i<bars;i++){let x=i*w/bars;ctx.fillStyle=i%3?'#087e7a88':'#b93c5688';ctx.fillRect(x,h-25-rand()*20,w/bars*.65,25)}}
+document.getElementById('levButtons').innerHTML=[1,2,5,10,20,50,100].map(n=>`<button class="${n===S.lev?'active':''}" onclick="setLeverage(${n})">${n}x</button>`).join('');
+document.getElementById('longRange').max=100;document.getElementById('shortRange').max=100;document.getElementById('longRange').value=20;document.getElementById('shortRange').value=20;document.getElementById('longMargin').value=(S.cash*.2).toFixed(2);document.getElementById('shortMargin').value=(S.cash*.2).toFixed(2);document.getElementById('longMargin').addEventListener('input',()=>{document.getElementById('longRange').value=Math.max(0,Math.min(100,((+document.getElementById('longMargin').value||0)/Math.max(0.01,S.cash))*100));render()});document.getElementById('shortMargin').addEventListener('input',()=>{document.getElementById('shortRange').value=Math.max(0,Math.min(100,((+document.getElementById('shortMargin').value||0)/Math.max(0.01,S.cash))*100));render()});
+coins.forEach(c=>{c.change=0;c.high=c.price;c.low=c.price;c.hist=Array.from({length:48},(_,i)=>c.price*(.48+.52*i/47)*(1+Math.sin(i*.4)*.12))});
+render();drawChart();logEvent('新手村欢迎你','三线城市大专大三，毕业在即。你有500元生活费，以及一个“再来一次就收手”的计划。','🪙');
+</script>
+</body></html>
